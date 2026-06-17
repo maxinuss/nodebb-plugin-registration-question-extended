@@ -1,11 +1,12 @@
 "use strict";
 
 const plugin = module.exports;
-const meta = require.main.require('./src/meta');
+const meta = nodebb.require('./src/meta');
+const helpers = nodebb.require('./src/helpers');
 
 plugin.init = async function(params) {
 	const { router } = params;
-	const routeHelpers = require.main.require('./src/routes/helpers');
+	const routeHelpers = nodebb.require('./src/routes/helpers');
 	routeHelpers.setupAdminPageRoute(router, '/admin/plugins/registration-question', function (req, res) {
 		res.render('admin/plugins/registration-question', {
 			title: 'Registration Question & Answer',
@@ -26,9 +27,10 @@ plugin.addCaptcha = async function (params) {
 	const question = meta.config['registration-question:question'];
 	const inputId = 'registration-question';
 	const captcha = {
-		label: `[[registration-question:input-label]]<br/>${question}`,
+		label: `[[registration-question:input-label]]`,
 		inputId: inputId,
 		html: `
+			<div class="mb-2">${helpers.escape(question)}</div>
 			<input class="form-control" name="${inputId}" id="${inputId}" aria-required="true" />
 		`,
 	};
