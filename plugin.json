@@ -1,6 +1,6 @@
 {
-	"id": "nodebb-plugin-registration-question",
-	"name": "Registration Question",
+	"id": "nodebb-plugin-registration-question-extended",
+	"name": "Registration Question Extended",
 	"description": "Question and Answer plugin for the registration form",
 	"url": "https://github.com/NodeBB/nodebb-plugin-registration-question",
 	"library": "./library.js",

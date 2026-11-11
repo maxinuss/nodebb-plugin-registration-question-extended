@@ -4,7 +4,7 @@ A simple plugin that adds one or more questions to your registration page to hel
 
 ## Installation
 
-    npm install nodebb-plugin-registration-question
+    npm install nodebb-plugin-registration-question-extended
 
 ## Configuration
 
