@@ -1,9 +1,24 @@
 {
 	"input-label": "Pregunta de registro",
 	"error-wrong-answer": "Respuesta de registro incorrecta",
+	"error-blocked": "Registro bloqueado. Inténtalo de nuevo.",
+	"error-too-many-attempts": "Demasiados intentos. Inténtalo más tarde.",
 	"admin.help": "Agrega una o más preguntas. Los usuarios deben responder todas correctamente para registrarse. Las preguntas se muestran en orden aleatorio.",
 	"admin.question": "Pregunta",
 	"admin.answer": "Respuesta",
 	"admin.add-question": "Agregar pregunta",
-	"admin.remove": "Eliminar"
+	"admin.remove": "Eliminar",
+	"admin.security": "Seguridad",
+	"admin.honeypot": "Campo honeypot",
+	"admin.honeypot-help": "Agrega un campo invisible que los bots suelen completar.",
+	"admin.timing": "Exigir tiempo mínimo de llenado",
+	"admin.min-seconds": "Segundos mínimos",
+	"admin.token": "Token firmado por render",
+	"admin.token-help": "Aleatoriza los nombres de los campos y rechaza formularios vencidos o manipulados.",
+	"admin.rate-limit": "Activar límite de intentos",
+	"admin.rate-limit-attempts": "Máximo de intentos fallidos",
+	"admin.rate-limit-window": "Ventana (minutos)",
+	"admin.rate-limit-lockout": "Bloqueo (minutos)",
+	"admin.autocomplete": "Desactivar autocompletado",
+	"admin.autocomplete-help": "Agrega autocomplete=off y spellcheck=false a los campos de respuesta."
 }

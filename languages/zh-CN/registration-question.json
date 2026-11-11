@@ -1,9 +1,24 @@
 {
 	"input-label": "注册问题",
 	"error-wrong-answer": "回答错误",
+	"error-blocked": "注册已被阻止。请重试。",
+	"error-too-many-attempts": "尝试次数过多。请稍后再试。",
 	"admin.help": "添加一个或多个问题。用户必须正确回答所有问题才能注册。问题将以随机顺序显示。",
 	"admin.question": "问题",
 	"admin.answer": "答案",
 	"admin.add-question": "添加问题",
-	"admin.remove": "删除"
+	"admin.remove": "删除",
+	"admin.security": "安全",
+	"admin.honeypot": "蜜罐字段",
+	"admin.honeypot-help": "添加一个机器人通常会填写的隐藏字段。",
+	"admin.timing": "要求最短填写时间",
+	"admin.min-seconds": "最短秒数",
+	"admin.token": "每次渲染签名令牌",
+	"admin.token-help": "随机化字段名称，并拒绝过期或被篡改的表单。",
+	"admin.rate-limit": "启用请求频率限制",
+	"admin.rate-limit-attempts": "最大失败次数",
+	"admin.rate-limit-window": "时间窗口（分钟）",
+	"admin.rate-limit-lockout": "锁定时间（分钟）",
+	"admin.autocomplete": "禁用自动完成",
+	"admin.autocomplete-help": "为答案字段添加 autocomplete=off 和 spellcheck=false。"
 }

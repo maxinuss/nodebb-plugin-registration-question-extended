@@ -1,9 +1,24 @@
 {
 	"input-label": "Registration Question",
 	"error-wrong-answer": "Wrong registration answer",
+	"error-blocked": "Registration blocked. Please try again.",
+	"error-too-many-attempts": "Too many attempts. Please try again later.",
 	"admin.help": "Add one or more questions. Users must answer all of them correctly in order to register. Questions are shown in a random order.",
 	"admin.question": "Question",
 	"admin.answer": "Answer",
 	"admin.add-question": "Add question",
-	"admin.remove": "Remove"
+	"admin.remove": "Remove",
+	"admin.security": "Security",
+	"admin.honeypot": "Honeypot field",
+	"admin.honeypot-help": "Adds an invisible field that bots tend to fill in.",
+	"admin.timing": "Require a minimum fill time",
+	"admin.min-seconds": "Minimum seconds",
+	"admin.token": "Signed per-render token",
+	"admin.token-help": "Randomizes field names and rejects expired or tampered forms.",
+	"admin.rate-limit": "Enable rate limiting",
+	"admin.rate-limit-attempts": "Max failed attempts",
+	"admin.rate-limit-window": "Window (minutes)",
+	"admin.rate-limit-lockout": "Lockout (minutes)",
+	"admin.autocomplete": "Disable autocomplete",
+	"admin.autocomplete-help": "Adds autocomplete=off and spellcheck=false to the answer fields."
 }

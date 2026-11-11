@@ -80,6 +80,18 @@ define('admin/plugins/registration-question', ['admin/settings'], function (Sett
 			addRow('', '');
 			$container.find('.registration-question-row').last().find('[data-role="question"]').trigger('focus');
 		});
+
+		function bindToggle($checkbox, selector) {
+			const $targets = $(selector);
+			const update = function () {
+				$targets.prop('disabled', !$checkbox.prop('checked'));
+			};
+			$checkbox.on('change', update);
+			update();
+		}
+
+		bindToggle($('#rq-timing'), '#rq-min-seconds');
+		bindToggle($('#rq-rate-limit'), '#rq-rate-attempts, #rq-rate-window, #rq-rate-lockout');
 	};
 
 	return ACP;

@@ -8,12 +8,26 @@ A simple plugin that adds one or more questions to your registration page to hel
 
 ## Configuration
 
-Go to **ACP → Plugins → Registration Question** and add as many question/answer pairs as you need, then click **Save**.
+Go to **ACP → Plugins → Registration Question Extended** and add as many question/answer pairs as you need, then click **Save**.
 
 - Users must answer **all** questions correctly to register.
 - Questions are displayed in a **random order** on every load of the registration page.
 - Answers are compared ignoring case, all whitespace (including internal spaces) and diacritics (accents, ñ, ü). For example, `París`, `paris`, `PARIS` and `P a r i s` are all equivalent.
 - If no valid question/answer pair is configured, the registration form is not modified.
+
+## Security options
+
+All security layers are **disabled by default** and can be enabled independently from the ACP:
+
+| Option | Description |
+|---|---|
+| **Honeypot field** | Adds an invisible field that bots tend to fill in. A non-empty value blocks the registration. |
+| **Minimum fill time** | Rejects forms submitted too quickly. Default: 3 seconds, configurable. |
+| **Signed per-render token** | Randomizes input names and rejects expired or tampered forms. Tokens expire after 2 hours. |
+| **Rate limiting** | Blocks an IP after a number of failed attempts. Defaults: 5 failures / 15 minutes → 15-minute lockout. |
+| **Disable autocomplete** | Adds `autocomplete="off"`, `spellcheck="false"`, etc. to the answer fields. |
+
+The plugin does not log registration attempts. Rate-limit counters are short-lived and keyed by a hashed IP.
 
 ## Storage format
 

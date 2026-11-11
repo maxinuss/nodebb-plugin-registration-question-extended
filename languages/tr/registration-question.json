@@ -1,9 +1,24 @@
 {
 	"input-label": "Kayıt Doğrulama Sorusu",
 	"error-wrong-answer": "Yanlış cevap hatası",
+	"error-blocked": "Kayıt engellendi. Lütfen tekrar deneyin.",
+	"error-too-many-attempts": "Çok fazla deneme. Lütfen daha sonra tekrar deneyin.",
 	"admin.help": "Bir veya daha fazla soru ekleyin. Kullanıcılar kayıt olmak için tüm soruları doğru yanıtlamalıdır. Sorular rastgele sırada gösterilir.",
 	"admin.question": "Soru",
 	"admin.answer": "Cevap",
 	"admin.add-question": "Soru ekle",
-	"admin.remove": "Kaldır"
+	"admin.remove": "Kaldır",
+	"admin.security": "Güvenlik",
+	"admin.honeypot": "Honeypot alanı",
+	"admin.honeypot-help": "Botların genellikle doldurduğu görünmez bir alan ekler.",
+	"admin.timing": "Minimum doldurma süresi iste",
+	"admin.min-seconds": "Minimum saniye",
+	"admin.token": "Render başına imzalı token",
+	"admin.token-help": "Alan adlarını rastgeleleştirir ve süresi dolmuş veya değiştirilmiş formları reddeder.",
+	"admin.rate-limit": "İstek sınırlamasını etkinleştir",
+	"admin.rate-limit-attempts": "Maksimum başarısız deneme",
+	"admin.rate-limit-window": "Pencere (dakika)",
+	"admin.rate-limit-lockout": "Kilit süresi (dakika)",
+	"admin.autocomplete": "Otomatik tamamlamayı devre dışı bırak",
+	"admin.autocomplete-help": "Yanıt alanlarına autocomplete=off ve spellcheck=false ekler."
 }
