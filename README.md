@@ -12,7 +12,7 @@ Go to **ACP → Plugins → Registration Question** and add as many question/ans
 
 - Users must answer **all** questions correctly to register.
 - Questions are displayed in a **random order** on every load of the registration page.
-- Answers are compared ignoring case and leading/trailing whitespace.
+- Answers are compared ignoring case, all whitespace (including internal spaces) and diacritics (accents, ñ, ü). For example, `París`, `paris`, `PARIS` and `P a r i s` are all equivalent.
 - If no valid question/answer pair is configured, the registration form is not modified.
 
 ## Storage format

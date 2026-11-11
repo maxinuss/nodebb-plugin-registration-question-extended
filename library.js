@@ -41,6 +41,14 @@ function shuffle(array) {
 	return array;
 }
 
+function normalizeAnswer(value) {
+	return String(value || '')
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '')
+		.replace(/\s+/g, '')
+		.toLowerCase();
+}
+
 function buildInput(question) {
 	const inputId = `${INPUT_PREFIX}${question.index}`;
 	return {
@@ -57,7 +65,7 @@ plugin.init = async function(params) {
 	const routeHelpers = nodebb.require('./src/routes/helpers');
 	routeHelpers.setupAdminPageRoute(router, '/admin/plugins/registration-question', function (req, res) {
 		res.render('admin/plugins/registration-question', {
-			title: 'Registration Question & Answer',
+			title: 'Registration Question & Answer Extended',
 		});
 	});
 };
@@ -66,7 +74,7 @@ plugin.addAdminNavigation = async function(header) {
 	header.plugins.push({
 		route: '/plugins/registration-question',
 		icon: 'fa-tint',
-		name: 'Registration Question'
+		name: 'Registration Question Extended'
 	});
 	return header;
 };
@@ -111,9 +119,9 @@ plugin.checkRegister = async function(params) {
 
 	for (const question of questions) {
 		const inputId = `${INPUT_PREFIX}${question.index}`;
-		const answer = String(body[inputId] || '').trim();
+		const answer = String(body[inputId] || '');
 
-		if (answer.toLowerCase() !== question.answer.toLowerCase()) {
+		if (normalizeAnswer(answer) !== normalizeAnswer(question.answer)) {
 			throw new Error('[[registration-question:error-wrong-answer]]');
 		}
 	}
