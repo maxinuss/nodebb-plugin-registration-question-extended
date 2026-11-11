@@ -5,18 +5,17 @@
 		<div id="spy-container" class="col-12  px-0 mb-4" tabindex="0">
 			<form>
 				<p>
-					Enter a registration question for the user to answer.
+					[[registration-question:admin.help]]
 				</p>
-				<div class="mb-3">
-					<label class="form-label" for="Question">Question</label>
-					<input type="text" data-field="registration-question:question" title="Question" class="form-control" placeholder="Question">
-				</div>
-				<div class="mb-3">
-					<label class="form-label" for="Answer">Answer</label>
-					<input type="text" data-field="registration-question:answer" title="Answer" class="form-control" placeholder="Answer">
-				</div>
+				<div id="registration-questions"
+					data-question-placeholder="[[registration-question:admin.question]]"
+					data-answer-placeholder="[[registration-question:admin.answer]]"
+					data-remove-title="[[registration-question:admin.remove]]"></div>
+				<button type="button" id="registration-question-add" class="btn btn-secondary">
+					<i class="fa fa-plus"></i> [[registration-question:admin.add-question]]
+				</button>
+				<input type="hidden" data-field="registration-question:questions" id="registration-question-questions">
 			</form>
 		</div>
 	</div>
 </div>
-

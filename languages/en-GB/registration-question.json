@@ -1,4 +1,9 @@
 {
 	"input-label": "Registration Question",
-	"error-wrong-answer": "Wrong registration answer"
+	"error-wrong-answer": "Wrong registration answer",
+	"admin.help": "Add one or more questions. Users must answer all of them correctly in order to register. Questions are shown in a random order.",
+	"admin.question": "Question",
+	"admin.answer": "Answer",
+	"admin.add-question": "Add question",
+	"admin.remove": "Remove"
 }

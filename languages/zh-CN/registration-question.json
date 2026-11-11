@@ -1,4 +1,9 @@
 {
 	"input-label": "注册问题",
-	"error-wrong-answer": "回答错误"
+	"error-wrong-answer": "回答错误",
+	"admin.help": "添加一个或多个问题。用户必须正确回答所有问题才能注册。问题将以随机顺序显示。",
+	"admin.question": "问题",
+	"admin.answer": "答案",
+	"admin.add-question": "添加问题",
+	"admin.remove": "删除"
 }

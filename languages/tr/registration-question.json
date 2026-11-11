@@ -1,4 +1,9 @@
 {
 	"input-label": "Kayıt Doğrulama Sorusu",
-	"error-wrong-answer": "Yanlış cevap hatası"
+	"error-wrong-answer": "Yanlış cevap hatası",
+	"admin.help": "Bir veya daha fazla soru ekleyin. Kullanıcılar kayıt olmak için tüm soruları doğru yanıtlamalıdır. Sorular rastgele sırada gösterilir.",
+	"admin.question": "Soru",
+	"admin.answer": "Cevap",
+	"admin.add-question": "Soru ekle",
+	"admin.remove": "Kaldır"
 }
