@@ -5,7 +5,7 @@
   "main": "library.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/barisusakli/nodebb-plugin-registration-question"
+    "url": "https://github.com/maxinuss/nodebb-plugin-registration-question-extended"
   },
   "keywords": [
     "nodebb",
@@ -20,7 +20,7 @@
   },
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/barisusakli/nodebb-plugin-registration-question/issues"
+    "url": "https://github.com/maxinuss/nodebb-plugin-registration-question-extended/issues"
   },
   "nbbpm": {
     "compatibility": "^4.14.0"
