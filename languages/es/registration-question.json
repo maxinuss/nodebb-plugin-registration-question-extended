@@ -1,0 +1,9 @@
+{
+	"input-label": "Pregunta de registro",
+	"error-wrong-answer": "Respuesta de registro incorrecta",
+	"admin.help": "Agrega una o más preguntas. Los usuarios deben responder todas correctamente para registrarse. Las preguntas se muestran en orden aleatorio.",
+	"admin.question": "Pregunta",
+	"admin.answer": "Respuesta",
+	"admin.add-question": "Agregar pregunta",
+	"admin.remove": "Eliminar"
+}
