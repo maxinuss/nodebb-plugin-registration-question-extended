@@ -3,12 +3,11 @@
 define('admin/plugins/registration-question', ['admin/settings'], function (Settings) {
 	const ACP = {};
 
-	function parseQuestions(value) {
+	function parseSetting(value) {
 		try {
-			const parsed = JSON.parse(value || '[]');
-			return Array.isArray(parsed) ? parsed : [];
+			return JSON.parse(value);
 		} catch (err) {
-			return [];
+			return null;
 		}
 	}
 
@@ -25,7 +24,8 @@ define('admin/plugins/registration-question', ['admin/settings'], function (Sett
 		// Populate the hidden field from app.config before reading it.
 		Settings.prepare();
 
-		const questions = parseQuestions($hidden.val());
+		const savedQuestions = parseSetting($hidden.val());
+		const questions = Array.isArray(savedQuestions) ? savedQuestions : [];
 
 		function sync(markDirty) {
 			const rows = [];
@@ -114,6 +114,26 @@ define('admin/plugins/registration-question', ['admin/settings'], function (Sett
 
 		$add.on('click', function () {
 			addRow('', []).trigger('focus');
+		});
+
+		const $excludedTerms = $('#rq-excluded-terms');
+		const $exclusionFields = $('#rq-exclusions [data-exclusion]');
+		const savedExclusions = parseSetting($excludedTerms.val()) || {};
+
+		$exclusionFields.each(function () {
+			const value = savedExclusions[this.dataset.exclusion];
+			if (this.type === 'checkbox') {
+				this.checked = value !== false;
+			} else {
+				this.value = typeof value === 'string' ? value : '';
+			}
+		});
+		$exclusionFields.on('input change', function () {
+			const settings = {};
+			$exclusionFields.each(function () {
+				settings[this.dataset.exclusion] = this.type === 'checkbox' ? this.checked : this.value;
+			});
+			$excludedTerms.val(JSON.stringify(settings)).trigger('change');
 		});
 
 		function bindToggle($checkbox, selector) {

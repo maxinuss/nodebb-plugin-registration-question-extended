@@ -31,6 +31,34 @@
 
 				<hr>
 
+				<div id="rq-exclusions">
+					<h4>{{tx("registration-question:admin.excluded-terms")}}</h4>
+					<p id="rq-exclusions-help">{{tx("registration-question:admin.excluded-terms-help")}}</p>
+					<div class="mb-3">
+						<label class="form-label" for="rq-exclusions-common">{{tx("registration-question:admin.exclusions-common")}}</label>
+						<textarea class="form-control" id="rq-exclusions-common" data-exclusion="common" rows="3" aria-describedby="rq-exclusions-help"></textarea>
+						<div class="form-check mt-2">
+							<input class="form-check-input" type="checkbox" id="rq-exclusions-common-username" data-exclusion="commonUsername" checked>
+							<label class="form-check-label" for="rq-exclusions-common-username">{{tx("registration-question:admin.exclusions-common-username")}}</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" id="rq-exclusions-common-email" data-exclusion="commonEmail" checked>
+							<label class="form-check-label" for="rq-exclusions-common-email">{{tx("registration-question:admin.exclusions-common-email")}}</label>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="rq-exclusions-username">{{tx("registration-question:admin.exclusions-username")}}</label>
+						<textarea class="form-control" id="rq-exclusions-username" data-exclusion="username" rows="3" aria-describedby="rq-exclusions-help"></textarea>
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="rq-exclusions-email">{{tx("registration-question:admin.exclusions-email")}}</label>
+						<textarea class="form-control" id="rq-exclusions-email" data-exclusion="email" rows="3" aria-describedby="rq-exclusions-help"></textarea>
+					</div>
+					<input type="hidden" id="rq-excluded-terms" data-field="registration-question:excluded-terms">
+				</div>
+
+				<hr>
+
 				<h4>{{tx("registration-question:admin.security")}}</h4>
 
 				<div class="form-check mb-2">

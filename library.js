@@ -8,6 +8,7 @@ const nconf = nodebb.require('nconf');
 const db = nodebb.require('./src/database');
 
 const CONFIG_KEY = 'registration-question:questions';
+const EXCLUDED_TERMS_KEY = 'registration-question:excluded-terms';
 const ROTATION_KEY = 'registration-question:rotation';
 const QUESTION_COUNT_KEY = 'registration-question:question-count';
 const INPUT_PREFIX = 'registration-question-';
@@ -69,6 +70,29 @@ function normalizeAnswer(value) {
 		.replace(/[\u0300-\u036f]/g, '')
 		.replace(/\s+/g, '')
 		.toLowerCase();
+}
+
+function getExcludedTerms() {
+	try {
+		return JSON.parse(meta.config[EXCLUDED_TERMS_KEY] || '{}') || {};
+	} catch (err) {
+		return {};
+	}
+}
+
+function containsExcludedTerm(field, value, settings) {
+	if (typeof value !== 'string' || !value) {
+		return false;
+	}
+
+	const normalized = value.normalize().toLowerCase();
+	const useCommon = field === 'username' ? settings.commonUsername : settings.commonEmail;
+	const lists = useCommon === false ? [settings[field]] : [settings[field], settings.common];
+
+	return lists.some(list => typeof list === 'string' && list.split(/\r\n?|\n/).some((line) => {
+		const term = line.trim().normalize().toLowerCase();
+		return term && normalized.includes(term);
+	}));
 }
 
 function isEnabled(name) {
@@ -295,12 +319,21 @@ plugin.addCaptcha = async function (params) {
 };
 
 plugin.checkRegister = async function(params) {
+	const body = params.req.body || {};
+	const { username, email } = params.userData || body;
+	const exclusions = getExcludedTerms();
+	if (containsExcludedTerm('username', username, exclusions)) {
+		throw new Error('[[registration-question:error-excluded-username]]');
+	}
+	if (containsExcludedTerm('email', email, exclusions)) {
+		throw new Error('[[registration-question:error-excluded-email]]');
+	}
+
 	const questions = getQuestions();
 	if (!questions.length) {
 		return params;
 	}
 
-	const body = params.req.body || {};
 	const rateLimitEnabled = isEnabled('rate-limit');
 	const hash = rateLimitEnabled ? rateHash(params.req.ip) : '';
 
@@ -388,4 +421,12 @@ plugin.checkRegister = async function(params) {
 		}
 		throw err;
 	}
+};
+
+plugin.checkRegistrationEmail = async function (params) {
+	if (params.registration && params.allowed && containsExcludedTerm('email', params.email, getExcludedTerms())) {
+		params.allowed = false;
+		params.error = '[[registration-question:error-excluded-email]]';
+	}
+	return params;
 };
