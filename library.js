@@ -8,6 +8,8 @@ const nconf = nodebb.require('nconf');
 const db = nodebb.require('./src/database');
 
 const CONFIG_KEY = 'registration-question:questions';
+const ROTATION_KEY = 'registration-question:rotation';
+const QUESTION_COUNT_KEY = 'registration-question:question-count';
 const INPUT_PREFIX = 'registration-question-';
 const SECURITY_PREFIX = 'registration-question:security:';
 const HONEYPOT_FIELD = 'registration-question-website';
@@ -31,14 +33,26 @@ function getQuestions() {
 
 	return parsed.reduce((questions, item, index) => {
 		const question = item && typeof item.question === 'string' ? item.question.trim() : '';
-		const answer = item && typeof item.answer === 'string' ? item.answer.trim() : '';
+		const alternatives = Array.isArray(item?.answers) ? item.answers : [item?.answer];
+		const answers = alternatives.filter(answer => typeof answer === 'string')
+			.map(normalizeAnswer).filter(Boolean);
 
-		if (question && answer) {
-			questions.push({ index, question, answer });
+		if (question && answers.length) {
+			questions.push({ index, question, answers });
 		}
 
 		return questions;
 	}, []);
+}
+
+function questionCount(total) {
+	const count = Number(meta.config[QUESTION_COUNT_KEY]);
+	return Number.isSafeInteger(count) && count > 0 ? Math.min(count, total) : total;
+}
+
+function rotationEnabled() {
+	const value = meta.config[ROTATION_KEY] ?? 1;
+	return value === true || String(value) === '1';
 }
 
 function shuffle(array) {
@@ -138,7 +152,7 @@ function buildInput(question, tokenEnabled, usedIds) {
 		inputId,
 		html: `
 			<div class="mb-2">${helpers.escape(question.question)}</div>
-			<input class="form-control" name="${inputId}" id="${inputId}" aria-required="true"${answerAttributes()} />
+			<input class="form-control" name="${inputId}" id="${inputId}" aria-required="true" aria-describedby="registration-question-answer-help"${answerAttributes()} />
 		`,
 	};
 }
@@ -239,12 +253,15 @@ plugin.addCaptcha = async function (params) {
 	}
 
 	const tokenEnabled = isEnabled('token');
+	const count = questionCount(questions.length);
+	const requiresToken = tokenEnabled || count < questions.length;
 	const usedIds = new Set();
-	const shuffled = shuffle(questions.slice());
-	const inputs = shuffled.map(question => buildInput(question, tokenEnabled, usedIds));
+	const ordered = rotationEnabled() ? shuffle(questions) : questions;
+	const inputs = ordered.slice(0, count).map(question => buildInput(question, tokenEnabled, usedIds));
 	const hiddenFields = [];
 
-	if (tokenEnabled) {
+	// Bind a subset to its form even when field-name randomization is disabled.
+	if (requiresToken) {
 		hiddenFields.push(`<input type="hidden" name="${TOKEN_FIELD}" value="${buildQuestionsToken(inputs)}" />`);
 	} else if (isEnabled('timing')) {
 		hiddenFields.push(`<input type="hidden" name="${STARTED_FIELD}" value="${buildStartedToken()}" />`);
@@ -254,14 +271,15 @@ plugin.addCaptcha = async function (params) {
 		hiddenFields.push(honeypotField());
 	}
 
-	const hiddenHtml = hiddenFields.join('');
+	const formHelp = `<div class="form-text" id="registration-question-answer-help">[[registration-question:answer-help]]</div>`;
+	const formExtras = `${formHelp}${hiddenFields.join('')}`;
 
 	if (params.templateData.regFormEntry && Array.isArray(params.templateData.regFormEntry)) {
 		inputs.forEach((input, index) => {
 			params.templateData.regFormEntry.push({
 				label: '[[registration-question:input-label]]',
 				inputId: input.inputId,
-				html: index === 0 ? `${input.html}${hiddenHtml}` : input.html,
+				html: index === 0 ? `${input.html}${formExtras}` : input.html,
 			});
 		});
 	} else {
@@ -269,7 +287,7 @@ plugin.addCaptcha = async function (params) {
 		params.templateData.captcha = {
 			label: '[[registration-question:input-label]]',
 			inputId: 'registration-question',
-			html: `${inputs.map(input => input.html).join('')}${hiddenHtml}`,
+			html: `${inputs.map(input => input.html).join('')}${formExtras}`,
 		};
 	}
 
@@ -291,16 +309,18 @@ plugin.checkRegister = async function(params) {
 	}
 
 	try {
-		const tokenEnabled = isEnabled('token');
+		const count = questionCount(questions.length);
+		const requiresToken = isEnabled('token') || count < questions.length;
 		let startedAt = null;
-		let answers = null;
+		let fields;
 
-		if (tokenEnabled) {
+		if (requiresToken) {
 			const token = verify(body[TOKEN_FIELD]);
 			if (
 				!token ||
 				token.v !== 1 ||
 				!Array.isArray(token.ids) ||
+				token.ids.length !== count ||
 				typeof token.iat !== 'number' ||
 				typeof token.exp !== 'number' ||
 				token.exp < Date.now() ||
@@ -313,7 +333,7 @@ plugin.checkRegister = async function(params) {
 
 			const byIndex = new Map(questions.map(question => [question.index, question]));
 			const seenIds = new Set();
-			answers = [];
+			fields = [];
 
 			for (const item of token.ids) {
 				if (!item || typeof item.id !== 'string' || !byIndex.has(item.i) || seenIds.has(item.id)) {
@@ -321,14 +341,11 @@ plugin.checkRegister = async function(params) {
 				}
 
 				seenIds.add(item.id);
-				answers.push({
-					answer: byIndex.get(item.i).answer,
+				fields.push({
+					answers: byIndex.get(item.i).answers,
 					given: body[item.id],
 				});
-			}
-
-			if (answers.length !== questions.length) {
-				throw new Error('[[registration-question:error-blocked]]');
+				byIndex.delete(item.i);
 			}
 		} else if (isEnabled('timing')) {
 			const started = verify(body[STARTED_FIELD]);
@@ -349,15 +366,13 @@ plugin.checkRegister = async function(params) {
 			}
 		}
 
-		if (!answers) {
-			answers = questions.map(question => ({
-				answer: question.answer,
-				given: body[`${INPUT_PREFIX}${question.index}`],
-			}));
-		}
+		fields ??= questions.map(question => ({
+			answers: question.answers,
+			given: body[`${INPUT_PREFIX}${question.index}`],
+		}));
 
-		for (const item of answers) {
-			if (normalizeAnswer(String(item.given || '')) !== normalizeAnswer(item.answer)) {
+		for (const { answers, given } of fields) {
+			if (typeof given !== 'string' || !answers.includes(normalizeAnswer(given))) {
 				throw new Error('[[registration-question:error-wrong-answer]]');
 			}
 		}

@@ -10,14 +10,15 @@ A simple plugin that adds one or more questions to your registration page to hel
 
 Go to **ACP → Plugins → Registration Question Extended** and add as many question/answer pairs as you need, then click **Save**.
 
-- Users must answer **all** questions correctly to register.
-- Questions are displayed in a **random order** on every load of the registration page.
+- Users must answer **every question shown** correctly. Each question can have multiple valid answers; any one is accepted.
+- **Random question rotation** is enabled by default. Turn it off to show questions in the configured order.
+- Set **Questions per registration** to limit how many questions appear. Leave it blank to show all available questions.
 - Answers are compared ignoring case, all whitespace (including internal spaces) and diacritics (accents, ñ, ü). For example, `París`, `paris`, `PARIS` and `P a r i s` are all equivalent.
 - If no valid question/answer pair is configured, the registration form is not modified.
 
 ## Security options
 
-All security layers are **disabled by default** and can be enabled independently from the ACP:
+The following security options are **disabled by default** and can be enabled independently from the ACP. When only a subset of questions is shown, a signed token identifies the selected questions, even if field-name randomization is disabled.
 
 | Option | Description |
 |---|---|
@@ -35,11 +36,11 @@ Questions are stored as a JSON array in the `registration-question:questions` se
 
 ```json
 [
-	{ "question": "What is 2 + 2?", "answer": "4" },
-	{ "question": "What is the capital of France?", "answer": "Paris" }
+	{ "question": "What is 2 + 2?", "answers": ["4", "four"] },
+	{ "question": "What is the capital of France?", "answers": ["Paris"] }
 ]
 ```
 
 ## Upgrade note
 
-Since version 3.1.0 the plugin only reads the multi-question format above. The old `registration-question:question` / `registration-question:answer` settings are no longer used; re-enter your questions in the ACP after upgrading.
+Existing entries with a single `"answer"` string are still supported. The old standalone `registration-question:question` / `registration-question:answer` settings have not been used since version 3.1.0.

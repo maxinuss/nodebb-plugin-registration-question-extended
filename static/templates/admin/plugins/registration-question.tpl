@@ -7,10 +7,23 @@
 				<p>
 					{{tx("registration-question:admin.help")}}
 				</p>
+				<div class="form-check mb-2">
+					<input class="form-check-input" type="checkbox" id="rq-rotation" data-field="registration-question:rotation" checked>
+					<label class="form-check-label" for="rq-rotation">{{tx("registration-question:admin.rotation")}}</label>
+					<div class="form-text">{{tx("registration-question:admin.rotation-help")}}</div>
+				</div>
+				<div class="mb-3">
+					<label class="form-label" for="rq-question-count">{{tx("registration-question:admin.question-count")}}</label>
+					<input type="number" min="1" step="1" class="form-control" id="rq-question-count" data-field="registration-question:question-count" aria-describedby="rq-question-count-help">
+					<div class="form-text" id="rq-question-count-help">{{tx("registration-question:admin.question-count-help")}}</div>
+				</div>
+				<p class="form-text">{{tx("registration-question:answer-help")}}</p>
 				<div id="registration-questions"
 					data-question-placeholder="{{tx("registration-question:admin.question")}}"
 					data-answer-placeholder="{{tx("registration-question:admin.answer")}}"
-					data-remove-title="{{tx("registration-question:admin.remove")}}"></div>
+					data-add-answer="{{tx("registration-question:admin.add-answer")}}"
+					data-remove-answer="{{tx("registration-question:admin.remove-answer")}}"
+					data-remove-question="{{tx("registration-question:admin.remove-question")}}"></div>
 				<button type="button" id="registration-question-add" class="btn btn-secondary">
 					<i class="fa fa-plus"></i> {{tx("registration-question:admin.add-question")}}
 				</button>
